@@ -54,6 +54,7 @@
 ```
 
 ```javascript
+  //faking namespace
   var english = {
     greetings: {
       basic: "hello!"
