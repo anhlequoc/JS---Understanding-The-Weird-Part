@@ -137,3 +137,55 @@ So:
 ```
 So:
 > It's concept of **first class function**: can pass function around, give function to other functions, use them like variables, introduce an entirely new class of programming, called **functional programming**
+
+### By Value vs By Reference
+- By Value
+```javascript
+  //set variable to a primitive value
+  var a = 3; // set a = 3, 3 là 1 ô nhớ trong memory
+
+  var b = a; // set b = 1 ô nhớ khác với ô nhớ của a trong memory, cũng có giá trị là 3 hoặc có thể pass a vào 1 function
+
+  //-> gọi là By Value
+```
+- By Reference
+```javascript
+  //set variable to an object
+  var a = {name: 'anh'};
+
+  var b = a; // set b vào cùng 1 ô nhớ chứa object (không copy object sang 1 ô nhớ khác) với a trong memory hoặc có thể pass a vào 1 function
+
+  //-> By Reference
+```
+> all objects interact as By Reference
+
+Note:
+> Mutate: means change something | Immutable: means it can not be changed -> mutate object: change something of obj (attributes, ...)
+
+Note:
+```javascript
+  //By Reference
+  var c = {greeting: "hi"};
+  var d;
+  d = c;
+
+  c.greeting = "Hello";
+  console.log(c); //Hello
+  console.log(d); //Hello
+
+  function changeGreetings(obj){
+    obj.greeting = "hola";
+  }
+  changeGreetings(d);
+  console.log(c); //hola
+  console.log(d); //hola
+
+  //note: equal operator sets up new memory space (new address)
+  c = {greeting: 'howdy'} //set up 1 location mới ở memory cho c
+  console.log(c); //howdy
+  console.log(d); //hola (ngoại lệ) - vì d vẫn trỏ vào location cũ
+```
+> all primitive types are by value
+> all objects are by reference
+
+### Objects, Functions, and "this"
