@@ -190,3 +190,154 @@ Note:
 > all objects are by reference
 
 ### Objects, Functions, and "this"
+> reminder: when a function is invoked, a new execution context is created
+
+```javascript
+  function a() {
+    console.log(this);
+  }
+  a(); //show window object (global obj)
+  var b = function() {
+    console.log(this);
+  }
+  b(); //show window object
+```
+```javascript
+  var c = {
+    name: "the c object", //key has value as primitive type -> key is called as property, if value of key is a function, key is called as method
+    log: function() {
+      this.name = "update the c obj"; //can mutate (change) the obj that contains function if function is a method of obj
+      console.log(this);
+    }
+  }
+  c.log(); //return the c object
+```
+```javascript
+  var c = {
+    name: 'the c object',
+    log: function() {
+      this.name = 'update c obj';
+      console.log(this); //return the c obj with c.name is "update c obj"
+      var setName = function(newName) {
+        this.name = newName; //this ở đây sẽ trỏ về global obj (window obj), do đó, window obj sẽ có thêm property name và window.name  = "updated again! the c obj";
+      }
+      setName('updated again! the c obj');
+      console.log(this); // return the c obj with c.name still is "update c obj",
+    }
+  }
+```
+
+Để fix trường hợp this trỏ về window obj (globa obj), thường có cách này:
+```javascript
+  var c = {
+    name: 'the c obj',
+    log: function() {
+      var self = this; //hoặc var that = this; Vì obj là By Reference nên self sẽ trỏ đến cùng ô nhớ với this trên memory, từ đó thay đổi attribute của self sẽ thay đổi attribute của this (this đang trỏ vào obj c)
+      self.name = "update c obj";
+      console.log(self);
+      var setName = function(newName) {
+        self.name = newName;
+      }
+      setName('updated again! the c obj');
+      console.log(this); //return the c obj with the c.name is changed to "updated again! the c obj"
+    }
+  }
+```
+
+### Array - collections of anything
+> an array is a collection that holds many things inside of it
+
+```javascript
+  var arr = [
+    1,
+    false,
+    {
+      name: "anh",
+      address: "fake addres"
+    },
+    function(name) { //another array's element, which is a function
+      var greeting = "hello";
+      console.log(greeting + name);
+    },
+    "hello" // a string element in array
+ ]; //using literal array syntax
+ console.log(arr);
+ arr[3](arr[2].name); //in order to invoke the function: () is invoking function
+```
+
+### arguments AND SPREAD
+> arguments is a keyword that is set automatically by JS when calling a function. arguments contains all the values that are passed to function
+> Arguments are the parameters you pass to a functions, has special keyword named "arguments"
+
+```javascript
+  function greet(firstname, lastname, language) {
+    console.log(firstname);    
+    console.log(lastname);
+    console.log(language);    
+    console.log(arguments); //return "array" of params
+  }
+  greet();//nếu call greet() mà ko truyền vào parameters nào, -> trả về undefined hết vì khi khai báo function, JS engine sẽ setup bộ nhớ cho 3 tham số trên, và gán giá trị là undefined (giống như var xxx; console.log(xxx) -> kết quả là undefined)
+```
+- arguments gần như 1 array chứa các param nhưng không có đủ các feature như 1 JS array
+
+Spread:
+```javascript
+  function greet(firstname, lastname, ...other) {
+    console.log(firstname);
+    console.log(lastname);
+  }
+  greet("anh", "le", 23, "he he", false); //other sẽ chứa 23, "he he", false, gọi là spread
+
+```
+
+###Framework aside - function overloading
+```javascript
+  function greet(fistname, lastname, language) {
+    language = language || "en"; //set default value cho language la "en" trong truong hop khong truyen gia tri cho language
+
+    if (language === 'en') {
+      console.log('Hello ' + firstname + ' ' + lastname);
+    }
+
+    if (language === 'es') {
+      console.log('Hola ' + firstname + ' ' + lastname);
+    }
+  }
+
+  greet('John', 'Doe', 'en'); // return Hello...
+  greet('John', 'Doe', 'es'); // return Hola...
+
+  //hoặc dùng pattern khác để dùng function overloading
+  function greetEnglish (firstname, lastname) {
+    greet(firstname, lastname, 'en');
+  }
+
+  function greetSpanish (firstname, lastname) {
+    greet(firstname, lastname, 'es');
+  }
+  greetEnglish('John', 'Doe');
+  greetSpanish('John', 'Doe');
+```
+
+### Conceptual Aside - Syntax Parser
+> Syntax parser reads code written by developer and convert it to computer's language
+
+### Dangerous Aside
+> Dangerous Aside is so easy to make a mistake, and it's hard to track down, so you have to always avoid it while writing code
+
+- The JS Engine can put the semicolon automatically -> can cause a big problem in ```>
+> should always put your own semicolon
+
+```javascript
+  //ví dụ khi không đặt semicolon
+  function getPerson() {
+    return // không đặt dấu ';' ở đây
+    {
+      firstname: 'Tony'
+    }
+  }
+  console.log(getPerson()); //expect là obj trên nhưng thực tế bị undefined, vì JS engine tự động đặt dấu ';' vào ngay sau return (trước khi xuống dòng)
+```
+
+###Framework aside - white space
+> whitespace: are invisiable characters that create literal 'space' in your written code such as returns (enters) , tabs, spaces
