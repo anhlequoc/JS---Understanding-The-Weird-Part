@@ -325,7 +325,7 @@ Spread:
 ### Dangerous Aside
 > Dangerous Aside is so easy to make a mistake, and it's hard to track down, so you have to always avoid it while writing code
 
-- The JS Engine can put the semicolon automatically -> can cause a big problem in ```>
+- The JS Engine can put the semicolon automatically -> can cause a big problem in
 > should always put your own semicolon
 
 ```javascript
@@ -339,5 +339,72 @@ Spread:
   console.log(getPerson()); //expect là obj trên nhưng thực tế bị undefined, vì JS engine tự động đặt dấu ';' vào ngay sau return (trước khi xuống dòng)
 ```
 
-###Framework aside - white space
-> whitespace: are invisiable characters that create literal 'space' in your written code such as returns (enters) , tabs, spaces
+### Framework aside - white space
+> whitespace: are invisible characters that create literal 'space' in your written code such as returns (enters) , tabs, spaces
+
+### Immediately Invoked Function Expressions (IIFE)
+
+```javascript
+  //function statement
+  function greet(name) {
+    console.log(name);
+  }
+  greet("he");
+
+  //using function expression
+  var greetFunc = function(name) { //create function on the fly - có thể coi như using function literal
+    //giống như tạo object, có property là code -> invoke property on the fly
+    console.log(name);
+  };
+  greetFunc("he");
+
+  //using an Immediately Invoked Function Expression (IIFE)
+  var greeting = function(name) {
+    console.log(name);
+  }('John'); //đặt () để invoke function ngay lập tức sau khi create nó
+
+  //
+  var greeting2 = function(name) {
+    return "hello " + name;
+  }('John');
+  console.log(greeting2); //greeting lúc này là string, nếu cố gắng invoke nó: greeting2() > error: string is not a function
+```
+
+- **Pattern của IIFE xuất hiện trong nhiều major lib/framework của js:**
+```javascript
+  //IIFE
+  var firstname = "anh";
+  (function(name) { //đặt dấu ngoặc ở trước và sau fucntion để trick JS parser, coi như đây ko phải function
+    console.log("using IIFE " + name);
+  }(firstname)); //dấu ngoặc bao firstname để gọi ngay hàm này - executing code on the fly
+
+  //cause error
+  function(name) { //error: Uncaught SyntaxError: Unexpected token (
+    console.log(name);
+  }();
+```
+
+### Framework Aside: IIFEs and Safe Code
+
+```javascript
+  var greeting = "hello";
+  //IIFE
+  (function(name) {
+    var greeting = "hola"; // biến greeting chỉ nằm trong execution phase của hàm này, không ảnh hưởng đến global obj ở ngoài
+    console.log(greeting + " " + name);
+  }('Anh'));
+  console.log(greeting); //hello
+```
+- Viết như trên thì sẽ có *Safe Code* vì biến nằm riêng biệt trong scope khác nhau
+> các lib, framework rất hay bao đầu tiên và kết thúc là (function(){}) để tạo scope cho biến
+
+```javascript
+  //access to global object
+  var greeting = "hello";
+  (function(global, name) {
+    var greeting = "hola";
+    global.greeting = "xin chao!";
+  }(window, "anh")); //window ở đây là global obj của JS, thực tế có thể truyền vào bất kỳ thằng obj nào
+
+  console.log(greeting); //result là "xin chao!"
+```
