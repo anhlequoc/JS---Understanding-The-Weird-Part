@@ -35,7 +35,7 @@
   };
 ```
 
-###Faking Namespace
+### Faking Namespace
 > Namespace is a container for variables and functions, typically to keep variables and functions with the name separate (note that js does not have namespace but we can fake it by using Object)
 
 ```javascript
@@ -376,7 +376,7 @@ Spread:
   var firstname = "anh";
   (function(name) { //đặt dấu ngoặc ở trước và sau fucntion để trick JS parser, coi như đây ko phải function
     console.log("using IIFE " + name);
-  }(firstname)); //dấu ngoặc bao firstname để gọi ngay hàm này - executing code on the fly
+  }(firstname)); //dấu ngoặc bao cả hàm để gọi ngay hàm này - executing code on the fly
 
   //cause error
   function(name) { //error: Uncaught SyntaxError: Unexpected token (
@@ -408,3 +408,115 @@ Spread:
 
   console.log(greeting); //result là "xin chao!"
 ```
+
+### Understanding Closures
+```javascript
+  function greet(whattosay) {
+    return function(name) {
+      console.log(whattosay + ' ' + name);
+    }
+  }
+  var sayHi = greet('Hi'); //(A)
+  sayHi('Anh'); //(B)
+```
+- khi chạy đến line (A), JS engine sẽ đưa hàm greet vào trong execution stack, trả về 1 function, xong sẽ remove hàm greet() ra khỏi execution stack này.
+- **tuy nhiên biến whattosay vẫn tồn tại trong memory** (chưa được xóa)
+- chạy đến line (B), sayHi sẽ chạy đến dòng *console.log...* và thấy biến *whattosay*
+- Do không tìm thấy biến *whattosay* ở trong hàm của sayHi, JS Engine sẽ tìm ra ngoài scope của hàm sayHi này, lúc này sẽ thấy biến **whattosay tồn tại bên ngoài** , ở *outer of execution context* của hàm và sử dụng biến đó
+-> we say:
+> The execution context has closed in its outer variables, the variables that it would normally have reference to anyway. Even though those execution contexts are gone
+> And so this phenomenon, of it closing in all variables that it's supposed to have access to, is called a CLOSURE
+
+- example:
+    ```javascript
+      function buildFunctions() {
+        var arr = [];
+        for(var i = 0; i < 3; i++) {
+          arr.push(
+            function() {
+              console.log(i);
+            }
+          );
+        }
+        return arr;
+      }
+
+      var fs = buildFunctions();
+      //call elements of arr
+      fs[0](); //3
+      fs[1](); //3
+      fs[2](); //3
+      //Khi mới add function vào array ở vòng for, nó chưa call ngay dòng console.log, vì chưa có câu lệnh invoke các element của array, chỉ là add function vào array thôi
+      // the console.log() is executed when it's invoked only, not execute when it's writing in code
+      // i còn được gọi là free variable - outside of function but you have access to
+    ```
+  + để gọi được 0, 1, 2 ở i
+    ```javascript
+      //ES 5
+      function buildFunction2() {
+        var arr = [];
+        for (var i = 0; i < 3; i++) {
+          arr.push(
+            (function(j) {
+              //console.log(j); - có dòng này sẽ chạy ngay khi push vào arr, ko cần phải invoke
+              return function(){
+                console.log(j);
+              }
+            }(i)) //immediate invoke function: push f1 -> execute f1 -> push f2 -> execute f2 -> push f3 -> execute f3
+          )
+        }
+        return arr;
+      }
+      var fs = buildFunction2();
+      fs[0](); //0
+      fs[1](); //1
+      fs[2](); //2
+    ```
+    hoặc
+    ```javascript
+      //using ES6
+      function buildFunction3() {
+        var arr = [];
+        for (var i = 0; i < 3; i++) {
+          let j = i;
+          arr.push(
+            function() {
+              console.log(j);
+            }
+          );
+        }
+        return arr;
+      }
+      var fs = buildFunction3();
+      fs[0](); //0
+      fs[1](); //1
+      fs[2](); //2
+    ```
+
+### Framework Aside: Function Factories (use Closesure)
+  ```javascript
+    //function overloading by using closure
+    function makeGreeting(language) { //factory function - the function that returns or makes other things
+
+      return function (firstname, lastname) { // language will be collected in the closure
+        if (language === 'en') {
+          console.log('Hello ' + firstname + ' ' + lastname);
+        }
+
+        if (language === 'es') {
+          console.log('Hola ' + firstname + ' ' + lastname);
+        }
+      }
+    }
+
+    var greetEnglish = makeGreeting('en'); // create 1 execution context
+    var greetSpanish = makeGreeting('es'); // create another execution context (khác với trên) của cùng function - khi call lần thứ 2, thì có new execution context - đồng nghĩa với có lưu ở chỗ khác trong memory so với previous execution context
+
+    greetEnglish('anh', 'le'); //hello anh le
+    greetSpanish('anh', 'le'); //hola anh le
+
+    //makeGreeting() has acted as Factory function
+  ```
+  > Everytime you call a function, you get a new execution context - meaning new memory space to store function (each function has its own execution context)
+  > khi invoke greetEnglish('anh', 'le'), nó point đến 1st execution context, chứa language là 'en'
+  > khi invoke greetSpanish('anh', 'le'), nó point đến 2nd execution context, chứa language là 'es'
