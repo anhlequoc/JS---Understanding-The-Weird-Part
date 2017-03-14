@@ -520,3 +520,43 @@ Spread:
   > Everytime you call a function, you get a new execution context - meaning new memory space to store function (each function has its own execution context)
   > khi invoke greetEnglish('anh', 'le'), nó point đến 1st execution context, chứa language là 'en'
   > khi invoke greetSpanish('anh', 'le'), nó point đến 2nd execution context, chứa language là 'es'
+
+### Closures and Callbacks
+  ```javascript
+    function sayHiLater() {
+      var greeting = 'Hi!';
+      setTimeout(function() {
+        console.log(greeting); //using closure
+      }, 3000);
+    }
+    sayHiLater();
+
+    //same thing on jQuery
+    // jQuery uses function expressions and first-class functions!
+    $("button").click(function() { //click trong jQuery là 1 function, truyền vào 1 function object
+
+    });
+  ```
+- function trong setTimeout do something sau khi setTimeout chạy xong.
+- callback:
+> giving function to another function, having it execute when it's done, is called a callback
+
+-> **callback function: a function you give to another function, to be run when the other function is finished**
+
+  ```javascript
+    function tellMeWhenDone(callback) {
+      var a = 1000; //some work
+      var b = 2000; //some work
+      callback(); //the 'callback', it runs the function I give it!
+    }
+
+    tellMeWhenDone(function() {
+      console.log('I m done!');
+    })
+
+    tellMeWhenDone(function() {
+      console.log('all done...!');
+    })
+  ```
+
+### call(), apply(), and bind()
