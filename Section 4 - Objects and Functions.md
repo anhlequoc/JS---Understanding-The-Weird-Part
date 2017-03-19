@@ -674,3 +674,32 @@ Function là object, với những thuộc tính sau:
     var multiplyByThree = multiply.bind(this, 3);
     console.log(multiplyByThree(4)); // return 12
   ```
+
+### Functional Programming
+  ```javascript
+  //beauty of functional programming
+    function mapForEach(arr, fn) { //fn is a function
+      var newArr = [];
+      for (var i = 0; i < arr.length; i++) {
+        newArr.push(
+          fn(arr[i])
+        );
+      }
+
+      return newArr;
+    }
+
+    var arr1 = [1,2,3];
+    console.log(arr1);
+
+    var arr2 = [];
+    var arr2 = mapForEach(arr1, function(item) {
+      return item * 2;
+    });
+    console.log(arr2);
+
+    var arr3 = mapForEach(arr1, function(item) {
+      return item > 2;
+    });
+    console.log(arr3);
+  ```
