@@ -2,6 +2,7 @@
 
 ###OBJECTS and the DOT
   - Object có những properties, object hoặc function được connect với nó, lưu ở memory của máy tính
+
   ```javascript
   var person = new Object();
   person["firstName"] = "Tony"; //create new attribute of person obj, called "firstName" - save it in memory
@@ -18,6 +19,7 @@
   // DOT hay bracket ([]) khi access vào attribute của object đều là các operators, nên nó có priority và cách tính từ trái-phải hoặc phải-trái
 
   //chỉ nên dùng person['address']['street'] (dấu ngoặc vuông) khi cần thao tác với string trong trong ngoặc vuông (some kind of dynamic string - programmatically)
+  ```
 
 ####Object and Object Literals
 
@@ -86,6 +88,7 @@
   var a;
   if (a === 3) {} // -> if is statement, not expression because it does not return a value
 ```
+
 ```javascript
   //greet() is just function statement, because it does not return value  
   function greet() {
@@ -100,6 +103,7 @@
 ```
 
 - Chú ý
+
 ```javascript
   greet();
   function greet() { //hoisted function in preparation phase by JS engine
@@ -111,6 +115,7 @@
     console.log('hi');
   }
 ```
+
 So:
 > function statement are hoisted in preparation phase of JS engine
 > function expression are **not** hoisted in preparation phase of JS engine. it's just called in execution phase
@@ -127,6 +132,7 @@ So:
     console.log('hi');
   });
 ```
+
 ```javascript
   function log(a){
     //để gọi function anonymous ở dưới, chỉ cần viết thế này
@@ -136,11 +142,13 @@ So:
     console.log('hi');
   })
 ```
+
 So:
 > It's concept of **first class function**: can pass function around, give function to other functions, use them like variables, introduce an entirely new class of programming, called **functional programming**
 
 ### By Value vs By Reference
 - By Value
+
 ```javascript
   //set variable to a primitive value
   var a = 3; // set a = 3, 3 là 1 ô nhớ trong memory
@@ -149,7 +157,9 @@ So:
 
   //-> gọi là By Value
 ```
+
 - By Reference
+
 ```javascript
   //set variable to an object
   var a = {name: 'anh'};
@@ -158,12 +168,14 @@ So:
 
   //-> By Reference
 ```
+
 > all objects interact as By Reference
 
 Note:
 > Mutate: means change something | Immutable: means it can not be changed -> mutate object: change something of obj (attributes, ...)
 
 Note:
+
 ```javascript
   //By Reference
   var c = {greeting: "hi"};
@@ -186,6 +198,7 @@ Note:
   console.log(c); //howdy
   console.log(d); //hola (ngoại lệ) - vì d vẫn trỏ vào location cũ
 ```
+
 > all primitive types are by value
 > all objects are by reference
 
@@ -202,6 +215,7 @@ Note:
   }
   b(); //show window object
 ```
+
 ```javascript
   var c = {
     name: "the c object", //key has value as primitive type -> key is called as property, if value of key is a function, key is called as method
@@ -212,6 +226,7 @@ Note:
   }
   c.log(); //return the c object
 ```
+
 ```javascript
   var c = {
     name: 'the c object',
@@ -228,6 +243,7 @@ Note:
 ```
 
 Để fix trường hợp this trỏ về window obj (globa obj), thường có cách này:
+
 ```javascript
   var c = {
     name: 'the c obj',
@@ -278,9 +294,11 @@ Note:
   }
   greet();//nếu call greet() mà ko truyền vào parameters nào, -> trả về undefined hết vì khi khai báo function, JS engine sẽ setup bộ nhớ cho 3 tham số trên, và gán giá trị là undefined (giống như var xxx; console.log(xxx) -> kết quả là undefined)
 ```
+
 - arguments gần như 1 array chứa các param nhưng không có đủ các feature như 1 JS array
 
 Spread:
+
 ```javascript
   function greet(firstname, lastname, ...other) {
     console.log(firstname);
@@ -291,6 +309,7 @@ Spread:
 ```
 
 ###Framework aside - function overloading
+
 ```javascript
   function greet(fistname, lastname, language) {
     language = language || "en"; //set default value cho language la "en" trong truong hop khong truyen gia tri cho language
@@ -370,7 +389,8 @@ Spread:
   console.log(greeting2); //greeting lúc này là string, nếu cố gắng invoke nó: greeting2() > error: string is not a function
 ```
 
-- **Pattern của IIFE xuất hiện trong nhiều major lib/framework của js:**
+- **Pattern của IIFE xuất hiện trong nhiều major lib/framework của js**
+
 ```javascript
   //IIFE
   var firstname = "anh";
@@ -395,6 +415,7 @@ Spread:
   }('Anh'));
   console.log(greeting); //hello
 ```
+
 - Viết như trên thì sẽ có *Safe Code* vì biến nằm riêng biệt trong scope khác nhau
 > các lib, framework rất hay bao đầu tiên và kết thúc là (function(){}) để tạo scope cho biến
 
@@ -404,12 +425,14 @@ Spread:
   (function(global, name) {
     var greeting = "hola";
     global.greeting = "xin chao!";
+
   }(window, "anh")); //window ở đây là global obj của JS, thực tế có thể truyền vào bất kỳ thằng obj nào
 
   console.log(greeting); //result là "xin chao!"
 ```
 
 ### Understanding Closures
+
 ```javascript
   function greet(whattosay) {
     return function(name) {
@@ -419,6 +442,7 @@ Spread:
   var sayHi = greet('Hi'); //(A)
   sayHi('Anh'); //(B)
 ```
+
 - khi chạy đến line (A), JS engine sẽ đưa hàm greet vào trong execution stack, trả về 1 function, xong sẽ remove hàm greet() ra khỏi execution stack này.
 - **tuy nhiên biến whattosay vẫn tồn tại trong memory** (chưa được xóa)
 - chạy đến line (B), sayHi sẽ chạy đến dòng *console.log...* và thấy biến *whattosay*
@@ -428,6 +452,7 @@ Spread:
 > And so this phenomenon, of it closing in all variables that it's supposed to have access to, is called a CLOSURE
 
 - example:
+
     ```javascript
       function buildFunctions() {
         var arr = [];
@@ -450,7 +475,9 @@ Spread:
       // the console.log() is executed when it's invoked only, not execute when it's writing in code
       // i còn được gọi là free variable - outside of function but you have access to
     ```
+
   + để gọi được 0, 1, 2 ở i
+
     ```javascript
       //ES 5
       function buildFunction2() {
@@ -472,7 +499,9 @@ Spread:
       fs[1](); //1
       fs[2](); //2
     ```
+
     hoặc
+
     ```javascript
       //using ES6
       function buildFunction3() {
@@ -494,6 +523,7 @@ Spread:
     ```
 
 ### Framework Aside: Function Factories (use Closesure)
+
   ```javascript
     //function overloading by using closure
     function makeGreeting(language) { //factory function - the function that returns or makes other things
@@ -517,6 +547,7 @@ Spread:
 
     //makeGreeting() has acted as Factory function
   ```
+
   > Everytime you call a function, you get a new execution context - meaning new memory space to store function (each function has its own execution context)
   > khi invoke greetEnglish('anh', 'le'), nó point đến 1st execution context, chứa language là 'en'
   > khi invoke greetSpanish('anh', 'le'), nó point đến 2nd execution context, chứa language là 'es'
@@ -560,3 +591,86 @@ Spread:
   ```
 
 ### call(), apply(), and bind()
+> dùng để control **this** trỏ vào đâu
+
+Function là object, với những thuộc tính sau:
+- name (optional): can be anonymous
+- có thuộc tính invocable () : access vào code
+- **có access vào những special method** như call(), apply(), bind(). Những special methods này phải sử dụng với **this** variable
+
+  ```javascript
+    var person = {
+      firstname: 'John',
+      lastname: 'Doe',
+      getFullName: function() {
+        var fullname = this.firstname + ' ' + this.lastname;
+        return fullname;
+      }
+    }
+
+    var logName = function(lang1, lang2) {
+      console.log('Logged: ' + this.getFullName()); //return error vì this đang ở global object
+      console.log('Arguments: ' + lang1 + ' '+ lang2);
+      console.log('-------');
+    }
+
+    var logPersonName = logName.bind(person);
+    logPersonName('en');//return Logged John Doe
+    /*có thể viết
+      var logName = function(lang1, lang2) {
+      console.log('Logged: ' + this.getFullName());      
+      }.bind(person);
+      logName();
+    */
+
+    logName.call(person, 'en', 'es'); //first param is where this points to, next are params
+    logname.apply(person, ['en', 'es']); //do exact same thing with call(), except it needs an array of params
+  ```
+
+> .bind() creates a copy of whatever function you're calling it on and then whatever methods you pass to it, whatever object you pass to this method, the person object pass to bind. The person obj is what the this variable points to, by reference
+
+  ```javascript
+  //c2: create function on the fly, the invoking it using .apply() because all function objects get access to this method
+  (function(lang1, lang2) {
+    console.log('Logged: ' + this.getFullName()); //return error vì this đang ở global object
+    console.log('Arguments: ' + lang1 + ' '+ lang2);
+    console.log('-------');
+  }).apply(person, ['en', 'es']);
+  ```
+
+- Khi dùng trong thực tế
+  ```javascript
+  //function borrowing
+    var person = {
+      firstname: 'John',
+      lastname: 'Doe',
+      getFullName: function() {
+        var fullname = this.firstname + ' ' + this.lastname;
+        return fullname;
+      }
+    };
+    var person2 = {
+      firstname: 'Jane',
+      lastname: 'Doe'
+    }
+
+    console.log(person.getFullName.apply(person2)); // gọi getFullName function obj của person, nhưng trỏ this đến person2 -> return Jane Doe
+
+  ```
+
+> with .call() and .apply(), passing params just passes the parameters
+> with .bind(), you're not calling the original function, you're creating a new copy of it
+
+- **Function curring: creating a copy of a function but with some preset parameters**. It's very useful in mathematical situations
+  ```javascript
+  //function curring
+    function multiply (a, b) {
+      return a*b;
+    }
+
+    var multiplyByTwo = multiply.bind(this, 2); // 2 là preset của param a
+    console.log(multiplyByTwo(3)); //3 được hiểu là b -> return 6
+
+    var multiplyByThree = multiply.bind(this, 3);
+    console.log(multiplyByThree(4)); // return 12
+  ```
