@@ -7,3 +7,62 @@
 
 ### Understanding the Prototype
   > All objects (incl function) have a prototype property: obj.prototype. the prototype is simply a reference to another object, call it as "proto"
+
+  ```javascript
+  var person = {
+    firstName: 'default',
+    lastName: 'default',
+    getFullName: function() {
+      return this.firstName + " " + this.lastName;
+    }
+  };
+
+  var John = {
+    firstName: "John",
+    lastName: "Doe"
+  }
+
+  //just for demo purposes!!! don't do this ever!
+  John.__proto__ = person; //gán prototype của John là person
+  console.log(John.getFullName()); //*this* lúc này vẫn trỏ vào obj John. return -> John Doe
+
+  var Jane = {
+    firstName: "Jane"
+  }
+  Jane.__proto__ = person;
+  console.log(Jane.getFullName()); //Jane Default
+
+  ```
+
+### Everything is an Object (or a primitive)
+> Functions, Array, Numbers.... are basic object. They all have prototype
+
+```javascript
+  var a = {};
+  var b = function() {};
+  var c = [];
+
+  //in console, try to type a.__proto__. hoac b.__proto__., hoac c.__proto__. to see some default function of this object
+  // function la call, bind, apply
+  // array la push...
+```
+
+### Reflection and Extend
+> an useful way to create object
+> Reflection is an object can look at itself, listing and changing this properties and methods. Use this feature to apply as Extend
+
+```javascript
+var person = {
+  firstName: 'default',
+  lastName: 'default',
+  getFullName: function() {
+    return this.firstName + " " + this.lastName;
+  }
+};
+
+var john = {
+  firstName: "John",
+  lastName: "Doe"
+}
+
+```
