@@ -18,6 +18,7 @@ Global Execution context is created in two phases:
   -> JS là single thread synchronous execution (sẽ xem async ở dưới)
   - mỗi lần fucntion is called, new execution context is called, line by line, synchronously
   ví dụ
+  
     ```javascript
       function a() {
         b(); //(3)
@@ -29,14 +30,16 @@ Global Execution context is created in two phases:
       a(); //(1)
       var d; //(2)
     ```
-    Thứ tự các dòng code chạy là: (1) -> (3) -> (5) -> (4) -> (2) (do js là single thread và synchronous)
+Thứ tự các dòng code chạy là: (1) -> (3) -> (5) -> (4) -> (2) (do js là single thread và synchronous)
 
 #### let
+
   ```javascript
     if (a > b) {
       let c = true; // c chỉ access được trong phạm vi {} gần nhất
     }
   ```
+
 ### Asynchronous callbacks
 > Asynchronous: more than one at a time (JS Engine run code line by line, synchronously)
 
@@ -56,6 +59,7 @@ Asynchronous callbacks is possible in Javascript but it's really about something
   ```Java
     bool isNew = 'hello'; //an error
   ```
+  
   ```javascript
     var isNew = true; //no error
     isNew = 'up!';
