@@ -52,17 +52,27 @@
 > Reflection is an object can look at itself, listing and changing this properties and methods. Use this feature to apply as Extend
 
 ```javascript
-var person = {
-  firstName: 'default',
-  lastName: 'default',
-  getFullName: function() {
-    return this.firstName + " " + this.lastName;
-  }
-};
+// An example of reflection
+  var person = {
+    firstName: 'default',
+    lastName: 'default',
+    getFullName: function() {
+      return this.firstName + " " + this.lastName;
+    }
+  };
 
-var john = {
-  firstName: "John",
-  lastName: "Doe"
-}
+  var john = {
+    firstName: "John",
+    lastName: "Doe"
+  }
+
+  //just for demo purpose, don't do it ever!
+  john.__proto__ = person;
+  for (var prop in john) { //for in sẽ lấy tất cả các prop của john, bao gồm cả từ john prototype
+    if (john.hasOwnProperty(prop)) { //hasOwnProperty() chỉ lấy những prop của john, không bao gồm của john prototype
+      console.log(prop + ": " + john[prop]);
+    }
+  }
+
 
 ```
