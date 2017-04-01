@@ -181,7 +181,7 @@ var john = Person("John", "Doe");//giả sử forgot "new" -> JS engine invoke f
 > Syntactic sugar: a diferent way to type something that doesn't change how it actually works under the hood
 
 ```javascript
-  class InformalPerson extends Person {
+  class InformalPerson extends Person { //trỏ prototype của InformalPerson vào Person
     constructor (firstName, lastName) {
       super(firstName, lastName);
     }
