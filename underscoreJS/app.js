@@ -45,3 +45,18 @@ var jim = {
 };
 
 _.extend(john, jane, jim);
+
+_.filter = _.select = function(obj, predicate, context) {
+  var results = [];
+  predicate = cb(predicate, context);
+  _.each(obj, function(value, index, list) {
+    if (predicate(value, index, list)) results.push(value);
+  });
+  return results;
+};
+
+_.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
+  _['is' + name] = function(obj) {
+    return toString.call(obj) === '[object ' + name + ']';
+  };
+});

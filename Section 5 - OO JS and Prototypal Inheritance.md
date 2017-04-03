@@ -63,7 +63,7 @@
 
   var john = {
     firstName: "John",
-    lastName: "Doe"
+    lastName: "Doe"So11
   }
 
   //just for demo purpose, don't do it ever!
