@@ -627,7 +627,7 @@ Function là object, với những thuộc tính sau:
     */
 
     logName.call(person, 'en', 'es'); //first param is where this points to, next are params
-    logname.apply(person, ['en', 'es']); //do exact same thing with call(), except it needs an array of params
+    logName.apply(person, ['en', 'es']); //do exact same thing with call(), except it needs an array of params
   ```
 
 > .bind() creates a copy of whatever function you're calling it on and then whatever methods you pass to it, whatever object you pass to this method, the person object pass to bind. The person obj is what the this variable points to, by reference
