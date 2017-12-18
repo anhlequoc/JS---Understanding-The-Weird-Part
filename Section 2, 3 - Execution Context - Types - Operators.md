@@ -1,16 +1,32 @@
 ### Execution Context
 Global Execution context is created in two phases:
   A. Creation Phase (Setup memory phase): will have 2 things
-    - Global Object
+    - Global Object (nếu chạy ở browser thì global object là "window")
     - this
     - Outer Environment
-    -> setup memory space for variables and functions, goij laf "hoisting" - move code (function created, variables exist in memory) to top so that other line of code can access them. Tuy nhiên có khác một chút với các biến (variables)
+    -> setup memory space for variables and functions, gọi là "hoisting" - move code (function created, variables exist in memory) to top so that other line of code can access them. Tuy nhiên có khác một chút với các biến (variables)
       - toàn bộ function (cả code trong function đó) được chuyển vào memory
-      - với biến, chỉ khai báo vào memory mà ko thực thi dòng code gán biến cho giá trị
-    -> ở phase này, toàn bộ biến đều là undefined
+      - với biến, chỉ khai báo vào memory mà ko thực thi dòng code gán biến cho giá trị -> ở phase này, toàn bộ biến đều là undefined
+    - Ví dụ:
 
-  B. Execution Phase:
-    - có 3 thứ trên setup (Global Object, this, Outer environment), phase này run code line by line
+    ```javascript
+      b();
+      console.log(a);
+      var a = "hello world";
+      function b () {
+        console.log("called b!");
+      }
+      // result:
+      // called b!
+      // undefined (do a đã được đưa vào memory và set lúc đầu là undefined, dòng code gán giá trị ko được thực thi ở phase này)
+    ```
+
+  B. Code Execution Phase:
+    - từ Creation Phase, có 3 thứ trên setup (Global Object, this, Outer environment), phase này run code line by line
+    - như đoạn code trên, a sẽ được in ra trước (là undefined) và sau đó mới gán trị cho a
+  > phân biệt undefined (đã được khai báo vào memory bằng câu lệnh var a; nhưng chưa có giá trị) với "not defined" (là chưa được khai báo vòa memory)
+
+  > không bao giờ set một biến manually là undefined, vì undefined là được set tự động bới js engine khi khai báo một biết: var a; -> sẽ không biết được biến đó là undefined do mình (developer) hay do js engine trong khi debugging
 
 ### Single Thread & Synchronous
   - Single Thread là trong 1 thời điểm chỉ có 1 lệnh thực thi
