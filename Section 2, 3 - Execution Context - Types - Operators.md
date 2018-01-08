@@ -56,7 +56,7 @@ Thứ tự các dòng code chạy là: (1) -> (3) -> (5) -> (4) -> (2) (do js l�
     }
   ```
 
-### Asynchronous callbacks
+### Asynchronous and Callbacks
 > Asynchronous: more than one at a time (JS Engine run code line by line, synchronously)
 
 The browser includes following elements:
@@ -67,7 +67,7 @@ The browser includes following elements:
 - JS Engine: bên cạnh Execution Stack (Global Execution Context > Execution context của từng hàm...), thì có 1 cái khác là *Event Queue*. *Event Queue* chứa những event như: Click, hover, HTTP Request (ví dụ khi đang chạy code mà có data trả về browser)
 - Khi Execution Stack is empty (chạy xong Execution context của từng hàm, chạy xong Global Execution Context), JS sẽ lắng nghe *Event Queue* xem có event nào xảy ra không để gọi event handler. Khi có event, nó sẽ gọi Execution context của event đó (ví dụ clickHanlder())
 > chú ý *Event Queue* chỉ được processed sau khi Execution Context empty
-Asynchronous callbacks is possible in Javascript but it's really about something outside JS Engine (tuy nhiên khi Execution Context đang chạy, *Event Queue* vẫn được lưu lại)
+Asynchronous callbacks is possible in Javascript but it's really about something outside JS Engine (tuy nhiên khi Execution Context đang chạy, *Event Queue* vẫn được lưu lại và được check sau khi execution context ends)
 
 ### Types
   > Dynamic Typing: you don't tell the engine what type of data a variable holds, it figures it out while your code is running -> variables can hold different types of values because it's all figured out during execution (differnt with Java, C#)
