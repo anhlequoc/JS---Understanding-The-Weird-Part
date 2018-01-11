@@ -205,6 +205,10 @@ Note:
 ### Objects, Functions, and "this"
 > reminder: when a function is invoked, a new execution context is created
 
+Note: **"this" keyword is pointing to different object depending on how function is invoked -> cause a lot of confusions**
+
+See some examples below:
+
 ```javascript
   function a() {
     console.log(this);
@@ -241,6 +245,7 @@ Note:
     }
   }
 ```
+**Ví dụ trên xảy ra rất nhiều trên thực tế.**
 
 Để fix trường hợp this trỏ về window obj (globa obj), thường có cách này:
 
